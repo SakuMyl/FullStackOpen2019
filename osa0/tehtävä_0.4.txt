@@ -40,4 +40,5 @@ Selain pyytää palvelimelta
 muistiinpanot sisältävän data.json
 -tiedoston
 end note 
+
 palvelin->selain: data.json

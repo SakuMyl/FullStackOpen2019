@@ -4,8 +4,6 @@ palvelin -> selain: HTML-koodi
 selain -> palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
 palvelin -> selain: css-tiedosto
 
-Selain lataa palvelimelta tyylitiedoston
-
 selain -> palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
 palvelin -> selain: js -koodi
 
@@ -20,5 +18,5 @@ selain -> palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.jso
 palvelin -> selain: Muistiinpanojen sisältö json-tiedostona
 
 Selain lataa muistiinpanot. 
-Javascript-koodi huolehtii uusien
+Javascript-koodi huolehtii 
 muistiinpanojen lisäämisestä sivulle.
