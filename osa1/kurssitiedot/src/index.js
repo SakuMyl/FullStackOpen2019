@@ -11,7 +11,7 @@ const Header = (props) => {
 const Total = (props) => {
     return(
         <>
-            <p>yhteensä {props.e1 + props.e2 + props.e3} tehtävää</p>
+            <p>yhteensä {props.exercises[0] + props.exercises[1] + props.exercises[2]} tehtävää</p>
         </>
     )
 }
@@ -25,35 +25,36 @@ const Part = (props) => {
 const Content = (props) => {
     return(
         <>
-            <Part part={props.part1} exercises={props.e1}/>
-            <Part part={props.part2} exercises={props.e2}/>
-            <Part part={props.part3} exercises={props.e3}/>
+            <Part part={props.parts[0].name} exercises={props.parts[0].exercises}/>
+            <Part part={props.parts[1].name} exercises={props.parts[1].exercises}/>
+            <Part part={props.parts[2].name} exercises={props.parts[2].exercises}/>
         </>
     )
 }
 const App = () => {
-    const course = 'Half Stack -sovelluskehitys'
-    const part1 = 'Reactin perusteet'
-    const exercises1 = 10
-    const part2 = 'Tiedonvälitys propseilla'
-    const exercises2 = 7
-    const part3 = 'Komponenttien tila'
-    const exercises3 = 14
+    const course = {
+        name: 'Half Stack -sovelluskehitys',
+        parts: [
+            {
+            name: 'Reactin perusteet',
+            exercises: 10
+            },
+            {
+            name: 'Tiedonvälitys propseilla',
+            exercises: 7
+            },
+            {
+            name: 'Komponenttien tila',
+            exercises: 14
+            }
+        ]   
+    }
 
     return (
         <div>
-        <Header course={course} />
-        <Content 
-            part1={part1} 
-            part2={part2} 
-            part3={part3}
-            e1={exercises1}
-            e2={exercises2}
-            e3={exercises3}/>
-        <Total 
-            e1={exercises1} 
-            e2={exercises2} 
-            e3={exercises3} />
+            <Header course={course.name} />
+            <Content parts={course.parts}/>
+            <Total exercises={course.parts.map(p => p.exercises)}/>
         </div>
   )
 }
