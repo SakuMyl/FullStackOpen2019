@@ -1,58 +1,36 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
+import App from './App'
+import axios from 'axios'
 
-const Display = ({counter}) => <div>{counter}</div>
+const promise = axios.get('http://localhost:3001/notes')
+console.log(promise)
 
-const Button = ({handleClick, text}) => (
-    <button onClick={handleClick}>
-        {text}
-    </button>    
-)
-const History = (props) => {
-  if (props.allClicks.length === 0) {
-    return (
-      <div>
-        sovellusta käytetään nappeja painelemalla
-      </div>
-    )
+const promise2 = axios.get('http://localhost:3001/foobar')
+console.log(promise2)
+
+const notes = [
+  {
+    id: 1,
+    content: 'HTML on helppoa',
+    date: '2019-01-10T17:30:31.098Z',
+    important: true
+  },
+  {
+    id: 2,
+    content: 'Selain pystyy suorittamaan vain javascriptiä',
+    date: '2019-01-10T18:39:34.091Z',
+    important: false
+  },
+  {
+    id: 3,
+    content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
+    date: '2019-01-10T19:20:14.298Z',
+    important: true
   }
-
-  return (
-    <div>
-      näppäilyhistoria: {props.allClicks.join(' ')}
-    </div>
-  )
-}
-
-const App = (props) => {
-  const [left, setLeft] = useState(0)
-  const [right, setRight] = useState(0)
-  const [allClicks, setAll] = useState([])
-
-  const handleLeftClick = () => {
-    setAll(allClicks.concat('L'))
-    setLeft(left + 1)
-  }
-
-  const handleRightClick = () => {
-    setAll(allClicks.concat('R'))
-    setRight(right + 1)
-  }
-
-  return (
-    <div>
-      <div>
-        {left}
-        <Button handleClick={handleLeftClick} text='vasen' />
-        <Button handleClick={handleRightClick} text='oikea' />
-        {right}
-        <History allClicks={allClicks} />
-      </div>
-    </div>
-  )
-}
+]
 
 ReactDOM.render(
-  <App />, 
+  <App notes={notes} />,
   document.getElementById('root')
 )
