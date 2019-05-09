@@ -33,6 +33,9 @@ const Country = ({country, showDetails}) => {
           height={100}
           width={100}
         ></img>
+        <WeatherInfo
+          city={country.capital}
+        />
       </div>
     )
   }
@@ -46,6 +49,35 @@ const Country = ({country, showDetails}) => {
         />
       </div>
     )
+  }
+}
+const WeatherInfo = ({city}) => {
+  const [data, setData] = useState([])
+  const [showData, setShowData] = useState(false)
+  useEffect(() => {
+    axios
+    .get(`http://api.apixu.com/v1/current.json?key=83fee21e8f35435c826163141190905&q=${city}`)
+    .then(response => {
+      console.log('promise fulfilled')
+      setData(response.data.current)
+      setShowData(true)
+    })
+  }, [])
+  console.log()
+  if(showData) {
+    return(
+      <div>
+        <h2>Weather in {city}</h2>
+        <p><b>Temperature:</b> {data.temp_c} Celsius</p>
+        <img
+          src={data.condition.icon}
+          alt={data.condition.text}
+        />
+        <p><b>Wind:</b> {data.wind_kph} kph direction {data.wind_dir}</p>
+      </div> 
+    )
+  } else {
+    return <p>Waiting for data...</p>
   }
 }
 const Languages = ({languages}) => {
@@ -68,6 +100,7 @@ const CountryList = ({countries}) => {
     return( 
       countries.map(country => 
         <Country 
+          key = {country.name}
           country={country}
           showDetails={false}
         />
