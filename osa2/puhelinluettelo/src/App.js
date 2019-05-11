@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
+import {getAll, create} from './AxiosUtils'
 
 const Header = ({name}) => (
   <h1>{name}</h1>
@@ -52,14 +52,10 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [newConstraint, setNewConstraint] = useState('')
 
-  useEffect(() =>{
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-    }, [])
+  useEffect(() => {
+    getAll()
+      .then(response => setPersons(response))
+  }, [])
   const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
@@ -82,6 +78,7 @@ const App = () => {
     if(persons.map(person => person.name).includes(newName)) {
       window.alert(`${newName} on jo luettelossa`)
     } else {
+      create(person)
       setPersons(persons.concat(person))
     }
   } 
