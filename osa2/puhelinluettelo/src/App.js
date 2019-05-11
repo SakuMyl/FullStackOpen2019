@@ -1,51 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import {getAll, create} from './AxiosUtils'
+import {getAll, create, remove, update} from './AxiosUtils'
+import {Header, Filter, NewPersonForm, Persons} from './Components'
 
-const Header = ({name}) => (
-  <h1>{name}</h1>
-)
-const Filter = (props) => {
-  return (
-    <div>
-      Rajaa näytettäviä: <input
-        value = {props.constraint}
-        onChange = {props.handleChange}
-      />
-    </div>
-  )
-}
-const NewPersonForm = (props) => {
-  return(
-    <div>
-      <h2>Lisää uusi</h2>
-      <form onSubmit = {props.handleSubmit}>
-        <div>
-          nimi: <input 
-            value = {props.name}
-            onChange={props.handleNameChange}
-            />
-        </div>
-        <div>
-          numero: <input
-          value = {props.number}
-          onChange={props.handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">lisää</button>
-        </div>
-      </form>
-    </div>
-  )
-}
-const Persons = ({persons}) => {
-  return(
-    <div>
-      <h2>Numerot</h2>
-      {persons}
-    </div>
-  )
-}
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
@@ -56,39 +12,72 @@ const App = () => {
     getAll()
       .then(response => setPersons(response))
   }, [])
+
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
+
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
     setNewNumber(event.target.value)
   }
+
   const handleConstraintChange = (event) => {
-    console.log(event.target.value)
     setNewConstraint(event.target.value)
   }
+
   const handleNewPerson = (event) => {
     event.preventDefault()
-    console.log(persons.concat(newName))
     const person = {
       name: newName,
       number: newNumber
     }
     if(persons.map(person => person.name).includes(newName)) {
-      window.alert(`${newName} on jo luettelossa`)
+      if(window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+        const existingPerson = persons.find(p => p.name === person.name)
+        update(existingPerson.id, person).then(response => setPersons(response))
+        setNewName('')
+        setNewNumber('')
+      }
     } else {
-      create(person)
-      setPersons(persons.concat(person))
+        if(person.name && person.number) {
+          create(person)
+            .then(response => setPersons(response.data))
+            .catch(err => console.log(err))
+          setNewName('')
+          setNewNumber('')
+        }
+        else {
+          window.alert('Anna nimi ja numero!')
+        }
     }
   } 
+
   const joinNameAndNumber = (person) => (
     `${person.name.toLowerCase()} ${person.number}`
   )
-  const filterPersons = () => (
-    persons.filter(person => joinNameAndNumber(person).includes(newConstraint.toLowerCase()))
-           .map(person => <p key={person.name}>{person.name} {person.number}</p>)
-  )
+
+  const removePerson = (person) => {
+    if(window.confirm(`Poistetaanko ${person.name}?`)) {
+      remove(person.id)
+      setPersons(persons.filter(p => p.id !== person.id))
+    }
+  }
+
+  const filterPersons = () => {
+    return(
+      persons.filter(person => joinNameAndNumber(person).includes(newConstraint.toLowerCase()))
+           .map(person => 
+              <div key={person.id}>
+                  <span>{person.name} {person.number} </span>
+                  <button
+                    onClick={() => removePerson(person)}>
+                    Poista
+                  </button>
+              </div>
+           )
+    )
+  }
+
   return (
     <div>
       <Header name='Puhelinluettelo'></Header>
