@@ -3,7 +3,7 @@ import React from 'react'
 const SubmitButton = () => (
   <button type="submit" className="submitButton">lisää</button>
 )
-const Notification = ({ message, type="notification" }) => {
+const Notification = ({ message, type }) => {
   if (message === null) {
     return null
   }

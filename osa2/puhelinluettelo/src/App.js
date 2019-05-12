@@ -26,7 +26,7 @@ const App = () => {
     setNewConstraint(event.target.value)
   }
 
-  const handleNotificationChange = (state) => {
+  const setNotificationState = (state) => {
     setNotification(state)
     setTimeout(() =>{
       setNotification({message:null})
@@ -47,7 +47,7 @@ const App = () => {
               p.name === person.name ?
               response : p)))
           .catch(() => 
-            handleNotificationChange(
+            setNotificationState(
               {
                 message:`${person.name} oli jo poistettu`,
                 type:'error'
@@ -55,7 +55,7 @@ const App = () => {
           )
         setNewName('')
         setNewNumber('')
-        handleNotificationChange(
+        setNotificationState(
           {
             message:`Päivitettiin ${person.name}`,
             type:'notification'
@@ -67,7 +67,7 @@ const App = () => {
             .then(response => setPersons(persons.concat(response)))
           setNewName('')
           setNewNumber('')
-          handleNotificationChange(
+          setNotificationState(
             {
               message:`Lisättiin ${person.name}`,
               type:'notification'
@@ -87,7 +87,7 @@ const App = () => {
     if(window.confirm(`Poistetaanko ${person.name}?`)) {
       remove(person.id)
         .then(() => setPersons(persons.filter(p => p.id !== person.id)))
-      handleNotificationChange(
+      setNotificationState(
         {
           message:`Poistettiin ${person.name}`,
           type:'notification'
