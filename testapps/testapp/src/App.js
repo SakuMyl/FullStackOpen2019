@@ -2,12 +2,25 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import Note from './components/Note'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
 const App = (props) => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState(
     'uusi muistiinpano...'
   ) 
   const [showAll, setShowAll] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('virhe...')
+
   const hook = () => {
     console.log('effect')
     axios
@@ -48,6 +61,8 @@ const App = (props) => {
   return (
     <div>
       <h1>Muistiinpanot</h1>
+
+      <Notification message={errorMessage}/>
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           näytä {showAll ? 'vain tärkeät' : 'kaikki' }
