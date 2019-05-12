@@ -1,5 +1,19 @@
 import React from 'react'
 
+const SubmitButton = () => (
+  <button type="submit" className="submitButton">lisää</button>
+)
+const Notification = ({ message, type="notification" }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className={type}>
+      {message}
+    </div>
+  )
+}
+
 const Header = ({name}) => (
     <h1>{name}</h1>
   )
@@ -31,7 +45,9 @@ const Header = ({name}) => (
             />
           </div>
           <div>
-            <button type="submit">lisää</button>
+            <SubmitButton 
+              text='lisää'
+            />
           </div>
         </form>
       </div>
@@ -50,5 +66,6 @@ export {
     Header,
     Filter,
     NewPersonForm,
-    Persons
+    Persons,
+    Notification
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {getAll, create, remove, update} from './AxiosUtils'
-import {Header, Filter, NewPersonForm, Persons} from './Components'
+import {Header, Filter, NewPersonForm, Persons, Notification} from './Components'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [newConstraint, setNewConstraint] = useState('')
+  const [notification, setNotification] = useState({message:null, error:false})
 
   useEffect(() => {
     getAll()
@@ -25,6 +26,12 @@ const App = () => {
     setNewConstraint(event.target.value)
   }
 
+  const handleNotificationChange = (state) => {
+    setNotification(state)
+    setTimeout(() =>{
+      setNotification({message:null})
+    }, 5000)
+  } 
   const handleNewPerson = (event) => {
     event.preventDefault()
     const person = {
@@ -39,8 +46,20 @@ const App = () => {
             setPersons(persons.map(p => 
               p.name === person.name ?
               response : p)))
+          .catch(() => 
+            handleNotificationChange(
+              {
+                message:`${person.name} oli jo poistettu`,
+                type:'error'
+              })
+          )
         setNewName('')
         setNewNumber('')
+        handleNotificationChange(
+          {
+            message:`Päivitettiin ${person.name}`,
+            type:'notification'
+          })
       }
     } else {
         if(person.name && person.number) {
@@ -48,6 +67,11 @@ const App = () => {
             .then(response => setPersons(persons.concat(response)))
           setNewName('')
           setNewNumber('')
+          handleNotificationChange(
+            {
+              message:`Lisättiin ${person.name}`,
+              type:'notification'
+            })
         }
         else {
           window.alert('Anna nimi ja numero!')
@@ -63,7 +87,11 @@ const App = () => {
     if(window.confirm(`Poistetaanko ${person.name}?`)) {
       remove(person.id)
         .then(() => setPersons(persons.filter(p => p.id !== person.id)))
-      
+      handleNotificationChange(
+        {
+          message:`Poistettiin ${person.name}`,
+          type:'notification'
+        })
     }
   }
 
@@ -82,9 +110,14 @@ const App = () => {
     )
   }
 
+
   return (
     <div>
       <Header name='Puhelinluettelo'></Header>
+      <Notification 
+        message={notification.message}
+        type={notification.type}
+      />
       <Filter
         constraint={newConstraint}
         handleChange={handleConstraintChange}
