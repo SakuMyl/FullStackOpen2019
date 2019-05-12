@@ -34,15 +34,18 @@ const App = () => {
     if(persons.map(person => person.name).includes(newName)) {
       if(window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
         const existingPerson = persons.find(p => p.name === person.name)
-        update(existingPerson.id, person).then(response => setPersons(response))
+        update(existingPerson.id, person)
+          .then(response => 
+            setPersons(persons.map(p => 
+              p.name === person.name ?
+              response : p)))
         setNewName('')
         setNewNumber('')
       }
     } else {
         if(person.name && person.number) {
           create(person)
-            .then(response => setPersons(response.data))
-            .catch(err => console.log(err))
+            .then(response => setPersons(persons.concat(response)))
           setNewName('')
           setNewNumber('')
         }
@@ -59,7 +62,8 @@ const App = () => {
   const removePerson = (person) => {
     if(window.confirm(`Poistetaanko ${person.name}?`)) {
       remove(person.id)
-      setPersons(persons.filter(p => p.id !== person.id))
+        .then(() => setPersons(persons.filter(p => p.id !== person.id)))
+      
     }
   }
 
