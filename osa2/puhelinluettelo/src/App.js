@@ -41,18 +41,19 @@ const App = () => {
     if(persons.map(person => person.name).includes(newName)) {
       if(window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
         const existingPerson = persons.find(p => p.name === person.name)
+        console.log(existingPerson.id)
         update(existingPerson.id, person)
           .then(response => 
             setPersons(persons.map(p => 
               p.name === person.name ?
               response : p)))
-          .catch(() => 
+          .catch(err => {
             setNotificationState(
               {
                 message:`${person.name} oli jo poistettu`,
                 type:'error'
               })
-          )
+            })
         setNewName('')
         setNewNumber('')
         setNotificationState(
