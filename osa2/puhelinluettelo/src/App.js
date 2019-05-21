@@ -46,13 +46,13 @@ const App = () => {
             setPersons(persons.map(p => 
               p.name === person.name ?
               response : p)))
-          .catch(() => 
+          .catch(err => {
             setNotificationState(
               {
                 message:`${person.name} oli jo poistettu`,
                 type:'error'
               })
-          )
+            })
         setNewName('')
         setNewNumber('')
         setNotificationState(
