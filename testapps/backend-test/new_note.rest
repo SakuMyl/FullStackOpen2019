@@ -2,6 +2,6 @@ POST http://localhost:3001/notes
 content-type: application/json
 
 {
-    "content": "POST testi",
+    "content": "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
     "important": true
-}   
+} 
