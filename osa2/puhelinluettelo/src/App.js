@@ -7,7 +7,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [newConstraint, setNewConstraint] = useState('')
-  const [notification, setNotification] = useState({message:null, error:false})
+  const [notification, setNotification] = useState({message:null, type: 'notification'})
 
   useEffect(() => {
     getAll()
