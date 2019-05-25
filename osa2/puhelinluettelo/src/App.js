@@ -62,20 +62,23 @@ const App = () => {
           })
       }
     } else {
-        if(person.name && person.number) {
-          create(person)
-            .then(response => setPersons(persons.concat(response)))
-          setNewName('')
-          setNewNumber('')
-          setNotificationState(
-            {
-              message:`Lisättiin ${person.name}`,
-              type:'notification'
+        create(person)
+          .then(response => {
+            setPersons(persons.concat(response))
+            setNotificationState({
+                message:`Lisättiin ${person.name}`,
+                type:'notification'
+              })
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            setNotificationState({
+              message: error.response.data.error,
+              type: 'error'
             })
-        }
-        else {
-          window.alert('Anna nimi ja numero!')
-        }
+          })
+        
     }
   } 
 
