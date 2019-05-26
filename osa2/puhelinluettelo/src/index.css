@@ -14,19 +14,30 @@ h1 {
   padding: 0px 10px;
 }
 
-.NewPersonForm {
-  padding: 0px 10px;
-}
-.Persons {
-  padding: 0px 10px;
-}
-.Filter {
-  padding: 0px 10px;
-}
-
 h2 {
   text-shadow: 0px 2px 3px;
   color: green;
+}
+
+td {
+  padding: 0px 8px 0px 0px;
+  height: 30px;
+}
+
+td:last-of-type {
+  padding: 0px;
+}
+
+.NewPersonForm {
+  padding: 0px 10px;
+}
+
+.Persons {
+  padding: 0px 10px;
+}
+
+.Filter {
+  padding: 0px 10px;
 }
 
 .Person:hover{
@@ -36,8 +47,13 @@ h2 {
 button {
   border-radius: 8px;
 }
-.submitButton:hover {
+
+button:hover {
   cursor: pointer;
+  background-color: rgb(206, 83, 83);
+}
+
+.submitButton:hover {
   background-color: lightblue;
 }
 .submitButton {
@@ -63,10 +79,7 @@ button {
   margin-bottom: 10px;
 }
 
-button:hover {
-  cursor: pointer;
-  background-color: red;
-}
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

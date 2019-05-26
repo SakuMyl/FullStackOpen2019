@@ -65,11 +65,26 @@ const Filter = (props) => {
       </div>
     )
   }
-  const Persons = ({persons}) => {
+  const Persons = ({persons, handleRemove}) => {
+    const list = persons.map(person => 
+        <tbody className='Person' key={person.id}>
+          <tr>
+            <td>{person.name}</td>
+            <td>{person.number}</td>
+            <td>
+              <button
+                onClick={() => handleRemove(person)}>
+                Poista
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      )
+
     return(
       <div className='Persons'>
         <h2>Numerot</h2>
-        {persons}
+        {list}
       </div>
     )
   }

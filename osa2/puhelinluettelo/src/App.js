@@ -99,24 +99,10 @@ const App = () => {
   }
 
   const filterPersons = () => {
-    const list = persons.filter(person => joinNameAndNumber(person).includes(newConstraint.toLowerCase()))
-      .map(person => 
-        <tbody className='Person' key={person.id}>
-          <tr>
-            <td>{person.name} {person.number}  </td>
-            <td>
-             <button
-                onClick={() => removePerson(person)}>
-                Poista
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      )
     return(
-      <table>
-        {list}
-      </table>
+      persons.filter(person => 
+        joinNameAndNumber(person).includes(newConstraint.toLowerCase())
+      )
     )
   }
 
@@ -139,7 +125,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
         handleNameChange={handleNameChange}
         ></NewPersonForm>
-      <Persons persons={filterPersons()}></Persons>
+      <Persons persons={filterPersons()} handleRemove={removePerson}></Persons>
     </div>
   )
 
