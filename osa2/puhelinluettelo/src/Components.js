@@ -15,47 +15,59 @@ const Notification = ({ message, type }) => {
 }
 
 const Header = ({name}) => (
-    <h1>{name}</h1>
+  <h1>{name}</h1>
+)
+
+const Filter = (props) => {
+  return (
+    <div className='Filter'>
+      Rajaa näytettäviä: <input
+        value = {props.constraint}
+        onChange = {props.handleChange}
+      />
+    </div>
   )
-  const Filter = (props) => {
-    return (
-      <div>
-        Rajaa näytettäviä: <input
-          value = {props.constraint}
-          onChange = {props.handleChange}
-        />
-      </div>
-    )
-  }
+}
   const NewPersonForm = (props) => {
     return(
-      <div>
+      <div className='NewPersonForm'>
         <h2>Lisää uusi</h2>
         <form onSubmit = {props.handleSubmit}>
-          <div>
-            nimi: <input 
-              value = {props.name}
-              onChange={props.handleNameChange}
-              />
-          </div>
-          <div>
-            numero: <input
-            value = {props.number}
-            onChange={props.handleNumberChange}
-            />
-          </div>
+          <table>
+            <tbody>
+              <tr>
+                <td>nimi:</td>
+                <td>
+                  <input 
+                  value = {props.name}
+                  onChange={props.handleNameChange}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>numero:</td> 
+                <td>
+                  <input
+                  value = {props.number}
+                  onChange={props.handleNumberChange}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <div>
             <SubmitButton 
               text='lisää'
             />
           </div>
+            
         </form>
       </div>
     )
   }
   const Persons = ({persons}) => {
     return(
-      <div>
+      <div className='Persons'>
         <h2>Numerot</h2>
         {persons}
       </div>

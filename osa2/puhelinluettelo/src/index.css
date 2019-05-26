@@ -7,9 +7,41 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+h1 {
+  font-style: italic;
+  text-shadow: 2px 2px 5px;
+  padding: 0px 10px;
+}
+
+.NewPersonForm {
+  padding: 0px 10px;
+}
+.Persons {
+  padding: 0px 10px;
+}
+.Filter {
+  padding: 0px 10px;
+}
+
+h2 {
+  text-shadow: 0px 2px 3px;
+  color: green;
+}
+
+.Person:hover{
+  background-color: lightgrey;
+}
+
+button {
+  border-radius: 8px;
+}
 .submitButton:hover {
   cursor: pointer;
   background-color: lightblue;
+}
+.submitButton {
+  margin: 5px 0px;
 }
 
 .notification {

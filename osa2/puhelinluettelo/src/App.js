@@ -99,17 +99,24 @@ const App = () => {
   }
 
   const filterPersons = () => {
+    const list = persons.filter(person => joinNameAndNumber(person).includes(newConstraint.toLowerCase()))
+      .map(person => 
+        <tbody className='Person' key={person.id}>
+          <tr>
+            <td>{person.name} {person.number}  </td>
+            <td>
+             <button
+                onClick={() => removePerson(person)}>
+                Poista
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      )
     return(
-      persons.filter(person => joinNameAndNumber(person).includes(newConstraint.toLowerCase()))
-           .map(person => 
-              <div key={person.id}>
-                  <span>{person.name} {person.number} </span>
-                  <button
-                    onClick={() => removePerson(person)}>
-                    Poista
-                  </button>
-              </div>
-           )
+      <table>
+        {list}
+      </table>
     )
   }
 
