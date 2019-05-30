@@ -40,6 +40,34 @@ test('id is defined correctly', async () => {
     })
 })
 
+test('new blog can be added to database', async () => {
+
+    const blog = {
+        title: "A title that no other blog is supposed to have",
+        author: "testblogger",
+        url: "http://testblogger.com",
+        likes: 10,
+    }
+    await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAfterUpdate = await api.get('/api/blogs')
+    
+    const contents = blogsAfterUpdate.body.map(b => {
+        return {
+            title: b.title, 
+            author: b.author, 
+            url: b.url, 
+            likes: b.likes
+        }
+    })
+    expect(blogsAfterUpdate.body.length).toBe(helper.initialBlogs.length + 1)
+    expect(contents).toContainEqual(blog)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
