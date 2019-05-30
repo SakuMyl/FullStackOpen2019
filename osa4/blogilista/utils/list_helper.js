@@ -51,7 +51,7 @@ const mostLikes = blogs => {
     const likes = {}
 
     forEach(Object.keys(grouped), author => likes[author] = totalLikes(grouped[author]))
-    
+
     const comparator = (author1, author2) => {
         return likes[author1] >= likes[author2] ? author1 : author2
     }
@@ -61,7 +61,7 @@ const mostLikes = blogs => {
         author,
         likes: likes[author]
     }
-    
+
 }
 module.exports = {
     dummy,
