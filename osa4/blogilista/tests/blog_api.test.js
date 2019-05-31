@@ -68,6 +68,45 @@ test('new blog can be added to database', async () => {
     expect(contents).toContainEqual(blog)
 })
 
+test('if likes is not defined, 0 is given as its value', async () => {
+
+    const blog = {
+        title: "A title that no other blog is supposed to have",
+        author: "testblogger",
+        url: "http://testblogger.com"
+    }
+
+    const response = await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    expect(response.body.likes).toBe(0)
+})
+
+test.only('if title or url is missing, returns status code 400', async () => {
+
+    const blogWithoutUrl = {
+        title: "A title that no other blog is supposed to have",
+        author: "testblogger",
+    }
+    const blogWithoutTitle = {
+        author: "testblogger",
+        url: "http://testblogger.com"
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blogWithoutUrl)
+        .expect(400)
+
+    await api
+        .post('/api/blogs')
+        .send(blogWithoutTitle)
+        .expect(400)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })

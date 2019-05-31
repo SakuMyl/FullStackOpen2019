@@ -21,7 +21,11 @@ blogsRouter.get('/:id', (request, response, next) => {
 
 blogsRouter.post('/', (request, response, next) => {
     const blog = new Blog(request.body)
-
+    blog.likes = blog.likes || 0
+    
+    if(!blog.title || !blog.url) {
+        response.status(400).end()
+    }
     blog.save()
         .then(savedBlog => {
             response.json(savedBlog.toJSON())
