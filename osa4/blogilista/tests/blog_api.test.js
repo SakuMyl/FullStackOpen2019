@@ -126,7 +126,7 @@ describe('when there is initially some blogs saved', () => {
         })
     })
 
-    describe.only('modification of a blog', () => {
+    describe('modification of a blog', () => {
 
         test('succeeds with valid data', async () => {
 
