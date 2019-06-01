@@ -42,9 +42,25 @@ blogsRouter.delete('/:id', (request, response, next) => {
 })
 
 blogsRouter.put('/:id', (request, response, next) => {
-    const blog = new Blog(request.body)
+    const {author, title, url, likes} = request.body
+    const blog = {
+        author,
+        title, 
+        url, 
+        likes
+    }
+    blog.likes = blog.likes || 0
 
     Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+        .then(updatedBlog => {
+            response.json(updatedBlog.toJSON())
+        })
+        .catch(error => next(error))
+})
+
+blogsRouter.patch('/:id', (request, response, next) => {
+    
+    Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
         .then(updatedBlog => {
             response.json(updatedBlog.toJSON())
         })

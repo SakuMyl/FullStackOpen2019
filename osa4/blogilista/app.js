@@ -14,6 +14,8 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
         console.log('error connection to MongoDB:', error.message)
     })
 
+mongoose.set('useFindAndModify', false)
+
 app.use(bodyParser.json())
 
 app.use('/api/blogs', blogsRouter)
