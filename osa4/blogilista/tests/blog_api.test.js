@@ -150,7 +150,7 @@ describe('when there is initially some blogs saved', () => {
 
 })
 
-describe.only('users', () => {
+describe('users', () => {
 
     beforeEach(async () => {
         await User.deleteMany({})
