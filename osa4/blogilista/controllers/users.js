@@ -4,7 +4,8 @@ const User = require('../models/user')
 
 
 usersRouter.get('/', async (request, response) => {
-    const users = await User.find({})
+    const users = await User
+        .find({}).populate('blogs', {user: 0, likes: 0})
     response.json(users.map(user => user.toJSON()))
 })
 
@@ -46,4 +47,12 @@ usersRouter.post('/', async (request, response, next) => {
     }
 })
 
+usersRouter.delete('/:id', async (request, response, next) => {
+    try {
+        await User.findByIdAndRemove(request.params.id)
+        response.status(204).end()
+    } catch(error) {
+        next(error)
+    }
+})
 module.exports = usersRouter

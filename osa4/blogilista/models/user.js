@@ -13,7 +13,13 @@ const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
-    }
+    },
+    blogs: [
+        {
+            ref: 'Blog',
+            type: mongoose.Schema.Types.ObjectId
+        }
+    ]
 
 })
 
