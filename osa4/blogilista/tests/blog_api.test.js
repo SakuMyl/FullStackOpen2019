@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
@@ -41,7 +42,7 @@ describe('when there is initially some blogs saved', () => {
             expect(blog._id).not.toBeDefined
         })
     })
-    
+
     describe('addition of a new blog', () => {
 
         test('succeeds with valid data', async () => {
@@ -58,17 +59,17 @@ describe('when there is initially some blogs saved', () => {
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
 
-            const blogsAfterUpdate = await api.get('/api/blogs')
+            const blogsAfterUpdate = await helper.blogsInDb()
 
-            const contents = blogsAfterUpdate.body.map(b => {
+            const contents = blogsAfterUpdate.map(b => {
                 return {
-                    title: b.title, 
-                    author: b.author, 
-                    url: b.url, 
+                    title: b.title,
+                    author: b.author,
+                    url: b.url,
                     likes: b.likes
                 }
             })
-            expect(blogsAfterUpdate.body.length).toBe(helper.initialBlogs.length + 1)
+            expect(blogsAfterUpdate.length).toBe(helper.initialBlogs.length + 1)
             expect(contents).toContainEqual(blog)
         })
 
@@ -119,10 +120,10 @@ describe('when there is initially some blogs saved', () => {
             const blogsInStart = await helper.blogsInDb()
             const blogToDelete = blogsInStart[0]
 
-            await api  
+            await api
                 .delete(`/api/blogs/${blogToDelete.id}`)
                 .expect(204)
-                
+
         })
     })
 
@@ -147,8 +148,99 @@ describe('when there is initially some blogs saved', () => {
         })
     })
 
-    afterAll(() => {
-        mongoose.connection.close()
+})
+
+describe.only('users', () => {
+
+    beforeEach(async () => {
+        await User.deleteMany({})
+    })
+    test('succeeds when adding a valid user', async () => {
+
+        const usersInStart = await helper.usersInDb()
+
+        const user = {
+            username: "validUserTest",
+            password: "secret",
+            name: "a very beautiful name"
+        }
+
+        await api
+            .post('/api/users')
+            .send(user)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const usersInEnd = await helper.usersInDb()
+
+        expect(usersInEnd.length).toBe(usersInStart.length + 1)
+        expect(usersInEnd.map(u => u.username)).toContain(user.username)
+    })
+    test('returns status code 400 when trying to add invalid user', async () => {
+
+        const usersInStart = await helper.usersInDb()
+        const invalidUsers = [
+            {
+                username: "invalidPasswordUser",
+                password: "se",
+                name: "a very creative name"
+            },
+            {
+                username: "in",
+                password: "secret",
+                name: "an unnecessarily long name which should not be used in these tests"
+            },
+            {
+                password: "secret",
+                name: "usernamemissing"
+            },
+            {
+                username: "passwordmissinguser",
+                name: "asdfasdfasdfasdf"
+            },
+            {
+                username: "namemissinguser",
+                password: "secret"
+            }
+        ]
+
+        for(let user of invalidUsers) {
+            await api
+                .post('/api/users')
+                .send(user)
+                .expect(400)
+        }
+
+        const usersInEnd = await helper.usersInDb()
+        expect(usersInEnd.length).toBe(usersInStart.length)
     })
 
+    test('returns status code 400 when adding a user with non-unique name', async () => {
+
+        const usersInStart = await helper.usersInDb()
+        const validUser = {
+            username: "ValidUser",
+            password: "secret",
+            name: "Iverunoutofnames"
+        }
+        await api
+            .post('/api/users')
+            .send(validUser)
+            .expect(200)
+
+        const response = await api
+            .post('/api/users')
+            .send(validUser)
+            .expect(400)
+
+        expect(response.body.error).toBe('username must be unique')
+
+        const usersInEnd = await helper.usersInDb()
+
+        expect(usersInEnd.length).toBe(usersInStart.length + 1)
+    })
+})
+
+afterAll(() => {
+    mongoose.connection.close()
 })
