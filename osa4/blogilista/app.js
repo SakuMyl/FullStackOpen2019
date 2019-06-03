@@ -20,6 +20,7 @@ mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
 app.use(bodyParser.json())
+app.use(middleware.tokenExtractor)
 
 app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogsRouter)

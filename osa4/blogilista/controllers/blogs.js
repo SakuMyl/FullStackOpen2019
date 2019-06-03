@@ -24,22 +24,13 @@ blogsRouter.get('/:id', async (request, response, next) => {
     }
 })
 
-const getTokenFrom = request => {
-    const authorization = request.get('authorization')
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        return authorization.substring(7)
-    }
-    return null
-}
+
 
 blogsRouter.post('/', async (request, response, next) => {
 
-    const token = getTokenFrom(request)
-
     try {
-        const tokenDecoded = jwt.verify(token, config.SECRET)
-        console.log(tokenDecoded)
-        if(!token || !tokenDecoded.id) {
+        const tokenDecoded = jwt.verify(request.token, config.SECRET)
+        if(!request.token || !tokenDecoded.id) {
             return response.status(401).json({error: 'token missing or invalid'})
         }
         
@@ -59,8 +50,22 @@ blogsRouter.post('/', async (request, response, next) => {
 
 blogsRouter.delete('/:id', async (request, response, next) => {
     try {
-        await Blog.findByIdAndRemove(request.params.id)
-        response.status(204).end()
+        const tokenDecoded = jwt.verify(request.token, config.SECRET)
+        if(!request.token ||!tokenDecoded.id) {
+            return response.status(401).json({error: 'token missing or invalid'})
+        }
+
+        const user = await User.findById(tokenDecoded.id)
+
+        const blog = await Blog.findById(request.params.id)
+
+        console.log(user._id, blog.user)
+        if(!user._id.equals(blog.user)) {
+            return response.status(401).end()
+        } else {
+            await blog.remove()
+            response.status(204).end()
+        }
     } catch(error) {
         next(error)
     }
