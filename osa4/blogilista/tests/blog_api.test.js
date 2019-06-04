@@ -7,12 +7,52 @@ const User = require('../models/user')
 
 const api = supertest(app)
 
+describe.only('logging in ', () => {
+
+    beforeEach(async () => {
+        await User.deleteMany({})
+        this.credentials = {
+            username: "testuser",
+            password: "secret",
+            name: "test"
+        }
+
+        const user = new User(this.credentials)
+        await user.save()
+    })
+
+    test('should succeed with a valid user', async () => {
+
+        await api
+            .post('/api/login')
+            .send(this.credentials)
+            .expect(200)
+    })
+})
 describe('when there is initially some blogs saved', () => {
 
     beforeEach(async () => {
+        await User.deleteMany({})
         await Blog.deleteMany({})
 
+        const credentials = {
+            username: "testuser",
+            password: "secret",
+            name: "test"
+        }
+
+        const user = new User(credentials)
+        await user.save()
+
+        const response = await api
+            .post('/api/login')
+            .send(credentials)
+
+        this.token = 'Bearer ' + response.body.token
+
         const blogs = helper.initialBlogs.map(blog => new Blog(blog))
+
+        blogs.forEach(blog => blog.user = user._id)
 
         const promiseArr = blogs.map(blog => blog.save())
 
@@ -53,8 +93,10 @@ describe('when there is initially some blogs saved', () => {
                 url: "http://testblogger.com",
                 likes: 10,
             }
+            console.log(this.token)
             await api
                 .post('/api/blogs')
+                .set('Authorization', this.token)
                 .send(blog)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
@@ -83,6 +125,7 @@ describe('when there is initially some blogs saved', () => {
 
             const response = await api
                 .post('/api/blogs')
+                .set('Authorization', this.token)
                 .send(blog)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
@@ -103,13 +146,19 @@ describe('when there is initially some blogs saved', () => {
 
             await api
                 .post('/api/blogs')
+                .set('Authorization', this.token)
                 .send(blogWithoutUrl)
                 .expect(400)
 
             await api
                 .post('/api/blogs')
+                .set('Authorization', this.token)
                 .send(blogWithoutTitle)
                 .expect(400)
+        })
+
+        afterAll(async () => {
+            await User.deleteMany({})
         })
     })
 
@@ -122,6 +171,7 @@ describe('when there is initially some blogs saved', () => {
 
             await api
                 .delete(`/api/blogs/${blogToDelete.id}`)
+                .send('Authorization', this.token)
                 .expect(204)
 
         })

@@ -3,7 +3,6 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
 
     if (error.name === 'CastError' && error.kind === 'ObjectId') {
         return response.status(400).send({ error: 'malformatted id' })
@@ -12,7 +11,7 @@ const errorHandler = (error, request, response, next) => {
     } else if(error.name === 'MongoError') {
         return response.status(400).json({ error: 'username must be unique' })
     } else if(error.name === "JsonWebTokenError") {
-        return response.status(400).json({ error: 'invalid token'})
+        return response.status(400).json({ error: 'invalid token' })
     }
 
     next(error)
