@@ -7,7 +7,7 @@ const User = require('../models/user')
 
 const api = supertest(app)
 
-describe.only('logging in ', () => {
+describe('logging in ', () => {
 
     beforeEach(async () => {
         await User.deleteMany({})
@@ -17,8 +17,10 @@ describe.only('logging in ', () => {
             name: "test"
         }
 
-        const user = new User(this.credentials)
-        await user.save()
+        await api
+            .post('/api/users')
+            .send(this.credentials)
+            .expect(200)
     })
 
     test('should succeed with a valid user', async () => {
@@ -32,27 +34,9 @@ describe.only('logging in ', () => {
 describe('when there is initially some blogs saved', () => {
 
     beforeEach(async () => {
-        await User.deleteMany({})
         await Blog.deleteMany({})
 
-        const credentials = {
-            username: "testuser",
-            password: "secret",
-            name: "test"
-        }
-
-        const user = new User(credentials)
-        await user.save()
-
-        const response = await api
-            .post('/api/login')
-            .send(credentials)
-
-        this.token = 'Bearer ' + response.body.token
-
         const blogs = helper.initialBlogs.map(blog => new Blog(blog))
-
-        blogs.forEach(blog => blog.user = user._id)
 
         const promiseArr = blogs.map(blog => blog.save())
 
@@ -85,6 +69,26 @@ describe('when there is initially some blogs saved', () => {
 
     describe('addition of a new blog', () => {
 
+        beforeEach(async () => {
+
+            await User.deleteMany({})
+            const credentials = {
+                username: "testuser",
+                password: "secret",
+                name: "test"
+            }
+    
+            await api
+                .post('/api/users')
+                .send(this.credentials)
+                .expect(200)
+            
+            const response = await api
+                .post('/api/login')
+                .send(credentials)
+    
+            this.token = 'Bearer ' + response.body.token
+        })
         test('succeeds with valid data', async () => {
 
             const blog = {
@@ -93,7 +97,6 @@ describe('when there is initially some blogs saved', () => {
                 url: "http://testblogger.com",
                 likes: 10,
             }
-            console.log(this.token)
             await api
                 .post('/api/blogs')
                 .set('Authorization', this.token)
@@ -164,6 +167,40 @@ describe('when there is initially some blogs saved', () => {
 
     describe('deletion of a blog', () => {
 
+        beforeEach(async () => {
+            await Blog.deleteMany({})
+            await User.deleteMany({})
+            const credentials = {
+                username: "testuser",
+                password: "secret",
+                name: "test"
+            }
+    
+            await api
+                .post('/api/users')
+                .send(this.credentials)
+                .expect(200)
+            
+            const response = await api
+                .post('/api/login')
+                .send(credentials)
+    
+            this.token = 'Bearer ' + response.body.token
+
+            const blog = {
+                title: "A title that no other blog is supposed to have",
+                author: "testblogger",
+                url: "http://testblogger.com",
+                likes: 10,
+            }
+
+            await api
+                .post('/api/blogs')
+                .set('Authorization', this.token)
+                .send(blog)
+                .expect(200)
+        })
+
         test('succeeds with status code 204 when id is valid', async () => {
 
             const blogsInStart = await helper.blogsInDb()
@@ -171,7 +208,7 @@ describe('when there is initially some blogs saved', () => {
 
             await api
                 .delete(`/api/blogs/${blogToDelete.id}`)
-                .send('Authorization', this.token)
+                .set('Authorization', this.token)
                 .expect(204)
 
         })
