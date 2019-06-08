@@ -4,7 +4,7 @@ import '../styles/CreateBlog.css'
 
 const CreateBlog = (props) => {
 
-    const [newBlog, setNewBlog] = useState({title: '', author: '', url: ''})
+    const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
 
     useEffect(() => {
         if(props.user) {
@@ -12,26 +12,23 @@ const CreateBlog = (props) => {
         }
     }, [])
 
-    const handleNewBlog = async (event) => {
+    const add = async (event) => {
         event.preventDefault()
         try {
             await blogService
                 .create(newBlog)
-            
+
+            props.handleNewBlog()
+
             props.setNotification(`${newBlog.title} by ${newBlog.author} added`)
-            setNewBlog({title: '', author: '', url: ''})
-            
-            blogService.getAll().then(blogs =>
-                props.handleNewBlog( blogs )
-            ) 
+            setNewBlog({ title: '', author: '', url: '' })
         } catch(error) {
-            console.log(error)
             props.setErrorMessage(error.response.data.error)
         }
     }
 
     const onChange = (key, event) => {
-        const blog = {...newBlog}
+        const blog = { ...newBlog }
         blog[key] = event.target.value
         setNewBlog(blog)
     }
@@ -39,10 +36,10 @@ const CreateBlog = (props) => {
     return (
         <div className='CreateNewBlogContainer'>
             <h2>create new</h2>
-            <form className='CreateNewBlog' onSubmit={handleNewBlog}>
+            <form className='CreateNewBlog' onSubmit={add}>
                 <table>
                     <tbody>
-                        {Object.keys(newBlog).map(key => 
+                        {Object.keys(newBlog).map(key =>
                             <tr key={key}>
                                 <td>{key}:</td>
                                 <td>
