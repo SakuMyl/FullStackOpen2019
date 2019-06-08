@@ -5,6 +5,7 @@ import loginService from './services/login'
 import CreateBlog from './components/CreateBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
 
 import './App.css'
 
@@ -41,37 +42,11 @@ const App = () => {
         )
     }
 
-    const loginForm = () => (
-        <form onSubmit={handleLogin}>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>käyttäjätunnus:</td>
-                        <td>
-                            <input
-                                type="text"
-                                value={username}
-                                name="Username"
-                                onChange={({ target }) => setUsername(target.value)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>salasana:</td>
-                        <td>
-                            <input
-                                type="password"
-                                value={password}
-                                name="Password"
-                                onChange={({ target }) => setPassword(target.value)}
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="submit">kirjaudu</button>
-        </form>
-    )
+    const handleBlogLike = (blog) => {
+        blogService.update(blog.id, { likes: blog.likes + 1 })
+        const newBlogs = blogs.map(b => b.id === blog.id ? {...b, likes: b.likes + 1} : b)
+        setBlogs(newBlogs)
+    }
 
     const getNotification = () => {
         if(notification) {
@@ -125,13 +100,16 @@ const App = () => {
     }
 
     if(user === null) {
-        return (
+        return ( 
             <div>
                 <h2>Log in</h2>
-
                 {getNotification()}
-
-                {loginForm()}
+                <LoginForm
+                    username={username}
+                    password={password}
+                    handleUsernameChange={setUsername}
+                    handlePasswordChange={setPassword}
+                    onSubmit={handleLogin}/>
             </div>
         )
     }
@@ -155,7 +133,7 @@ const App = () => {
                 />
             </Togglable>
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
+                <Blog key={blog.id} blog={blog} like={handleBlogLike}/>
             )}
         </div>
     )

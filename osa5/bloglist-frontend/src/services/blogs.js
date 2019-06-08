@@ -14,6 +14,11 @@ const login = async credentials => {
     return response.data
 }
 
+const get = blog => {
+    const request = axios.get(`${baseUrl}/${blog.id}`)
+    return request.then(response => response.data)
+}
+
 const getAll = () => {
     const request = axios.get(baseUrl)
     return request.then(response => response.data)
@@ -27,9 +32,9 @@ const create = async newObject => {
     return response.data
 }
 
-const update = (id, newObject) => {
-    const request = axios.put(`${ baseUrl } /${id}`, newObject)
+const update = (id, attributes) => {
+    const request = axios.patch(`${baseUrl}/${id}`, attributes)
     return request.then(response => response.data)
 }
 
-export default { getAll, create, update, setToken, login }
+export default { get, getAll, create, update, setToken, login }
