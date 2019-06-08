@@ -1,10 +1,9 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI1Y2YzY2ZjN2IwYmMzMzM1YjgwYjI5MTUiLCJpYXQiOjE1NTk3NTQ4ODV9.7swOPWUZDjCrnkIORYIFkyXX8UBtFqVposTu1wYrqQc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFydG9oZWxsYXMiLCJpZCI6IjVjZjkyYjFlZmUyYjI0MTgwYzA5ZDhlYiIsImlhdCI6MTU1OTgzMzQ3NH0.wX48QQbgh2phm7lmx9j3-hMyTJF09RKCFvJVF8Z_TtE
 
 {
-        "title": "Go To Statement Considered Harmful",
-        "author": "Edsger W. Dijkstra",
-        "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-        "likes": 5
+    "title": "First class tests",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll"
 }

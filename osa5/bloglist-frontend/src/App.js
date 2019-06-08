@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import CreateBlog from './components/CreateBlog'
+import Notification from './components/Notification'
 
 const App = () => {
 
   const [blogs, setBlogs] = useState([]) 
-  const [newBlog, setNewBlog] = useState('')
+  const [notification, setNotification]= useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
@@ -23,33 +25,68 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      loginService.setToken(user.token)
+      blogService.setToken(user.token)
     }
   }, [])
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
-      <div>
-        käyttäjätunnus
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        salasana
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
+      <table>
+        <tbody>
+          <tr>
+            <td>käyttäjätunnus:</td>
+            <td>
+              <input
+              type="text"
+              value={username}
+              name="Username"
+              onChange={({ target }) => setUsername(target.value)}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>salasana:</td>
+            <td>
+              <input
+              type="password"
+              value={password}
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <button type="submit">kirjaudu</button>
     </form>      
   )
+
+  const getNotification = () => {
+    if(notification) {
+      return (
+        <Notification className='Notification' message={notification}/>
+      )
+    } else if(errorMessage) {
+      return (
+        <Notification className='Error' message={errorMessage}/>
+      )
+    } else {
+      return undefined
+    }
+  }
+
+  const handleErrorMessage = message => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+  const handleNotification = message => {
+    setNotification(message)
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -59,16 +96,13 @@ const App = () => {
       })
 
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-      loginService.setToken(user.token)
+      blogService.setToken(user.token)
 
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('käyttäjätunnus tai salasana virheellinen')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      handleErrorMessage('käyttäjätunnus tai salasana virheellinen')
     }
   }
 
@@ -81,23 +115,36 @@ const App = () => {
   if(user === null) {
     return (
       <div>
-        <h2>Kirjaudu</h2>
-        <p>{errorMessage}</p>
+        <h2>Log in</h2>
+        
+        {getNotification()}
+
         {loginForm()}
       </div>
     )
   }
 
-
   return (
     <div>
-      <h1>Blogilista</h1>
-      <p>{errorMessage}</p>
+      <h1>Bloglist</h1>
+
+      {getNotification()}
+
       <p>{user.name} logged in</p>
+
       <button onClick={handleLogout}>Log out</button>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+
+      <CreateBlog 
+        user={user}
+        handleNewBlog={setBlogs} 
+        setNotification={handleNotification} 
+        setErrorMessage={handleErrorMessage}/>
+
+      <ul>
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )}
+      </ul>
     </div>
   )
 }

@@ -1,9 +1,18 @@
 
 import axios from 'axios'
-import token from './login'
 
 const baseUrl = '/api/blogs'
 
+let token = null
+
+const setToken = newToken => {
+  token = `Bearer ${newToken}`
+}
+
+const login = async credentials => {
+    const response = await axios.post(baseUrl, credentials)
+    return response.data
+}
 
 const getAll = () => {
   const request = axios.get(baseUrl)
@@ -23,4 +32,4 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update }
+export default { getAll, create, update, setToken, login }
