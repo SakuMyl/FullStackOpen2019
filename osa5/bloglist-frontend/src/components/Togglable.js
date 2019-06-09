@@ -1,7 +1,7 @@
 import React, { useState, useImperativeHandle } from 'react'
 import '../styles/Togglable.css'
 
-const Togglable = React.forwardRef((props, ref) => {
+const Togglable = React.forwardRef((props, ref) => { //eslint-disable-line react/display-name
     const [visible, setVisible] = useState(false)
 
     const hideWhenVisible = { display: visible ? 'none' : '' }

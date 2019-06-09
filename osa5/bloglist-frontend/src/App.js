@@ -145,7 +145,7 @@ const App = () => {
                     setErrorMessage={handleErrorMessage}
                 />
             </Togglable>
-            {blogs.sort((a, b) => { return b.likes - a.likes;}).map(blog => 
+            {blogs.sort((a, b) => { return b.likes - a.likes;}).map(blog =>
                 <Blog key={blog.id} userOwns={user.name === blog.user.name} remove={handleBlogRemoval}blog={blog} like={handleBlogLike}/>
             )}
         </div>
