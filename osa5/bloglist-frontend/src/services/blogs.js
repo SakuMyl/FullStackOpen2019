@@ -32,9 +32,17 @@ const create = async newObject => {
     return response.data
 }
 
+const remove = async id => {
+    const config = {
+        headers: { Authorization: token },
+    }
+
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+    return response.data
+}
 const update = (id, attributes) => {
     const request = axios.patch(`${baseUrl}/${id}`, attributes)
     return request.then(response => response.data)
 }
 
-export default { get, getAll, create, update, setToken, login }
+export default { get, getAll, create, update, remove, setToken, login }

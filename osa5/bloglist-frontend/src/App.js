@@ -42,10 +42,23 @@ const App = () => {
         )
     }
 
-    const handleBlogLike = (blog) => {
+    const handleBlogLike = async (blog) => {
         blogService.update(blog.id, { likes: blog.likes + 1 })
-        const newBlogs = blogs.map(b => b.id === blog.id ? {...b, likes: b.likes + 1} : b)
+        const newBlogs = blogs.map(b => b.id === blog.id ? { ...b, likes: b.likes + 1 } : b)
         setBlogs(newBlogs)
+    }
+
+    const handleBlogRemoval = async (blog) => {
+        try {
+            if(window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+                await blogService.remove(blog.id)
+                const newBlogs = blogs.filter(b => b.id !== blog.id)
+                setBlogs(newBlogs)
+                handleNotification(`${blog.title} by ${blog.author} removed successfully`)
+            }
+        } catch(error) {
+            handleErrorMessage(error.response.data.error)
+        }
     }
 
     const getNotification = () => {
@@ -100,7 +113,7 @@ const App = () => {
     }
 
     if(user === null) {
-        return ( 
+        return (
             <div>
                 <h2>Log in</h2>
                 {getNotification()}
@@ -132,8 +145,8 @@ const App = () => {
                     setErrorMessage={handleErrorMessage}
                 />
             </Togglable>
-            {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} like={handleBlogLike}/>
+            {blogs.sort((a, b) => { return b.likes - a.likes;}).map(blog => 
+                <Blog key={blog.id} userOwns={user.name === blog.user.name} remove={handleBlogRemoval}blog={blog} like={handleBlogLike}/>
             )}
         </div>
     )
