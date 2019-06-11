@@ -10,7 +10,7 @@ describe('SimpleBlog', () => {
     let component
 
     let mockHandler
-    
+
     beforeEach(() => {
 
         const blog = {
@@ -18,12 +18,12 @@ describe('SimpleBlog', () => {
             author: 'Test author',
             likes: 5
         }
-    
+
         mockHandler = jest.fn()
-    
+
         component = render (
             <SimpleBlog blog={blog} onClick={mockHandler}/>
-        )    
+        )
     })
 
     it('renders blog title and author', () => {
@@ -33,7 +33,7 @@ describe('SimpleBlog', () => {
 
         const secondDiv = component.container.querySelector('.likes')
         expect(secondDiv).toHaveTextContent('blog has 5 likes')
-        
+
     })
 
     it('correct number of button clicks are registered in event handler', () => {

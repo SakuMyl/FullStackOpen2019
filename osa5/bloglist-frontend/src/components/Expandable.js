@@ -12,7 +12,7 @@ const Expandable = props => {
             <div className='ExpandableTitle' onClick={() => setExpanded(!expanded)}>
                 {props.label}
             </div>
-            <div style={showWhenExpanded}>
+            <div className='ExpandedContent' style={showWhenExpanded}>
                 {props.children}
             </div>
         </div>
