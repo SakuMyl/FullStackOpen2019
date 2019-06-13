@@ -1,38 +1,28 @@
 import React from 'react'
+import { useField } from '../hooks/index'
 
 const LoginForm = ({
-    onSubmit,
-    handleUsernameChange,
-    handlePasswordChange,
-    username,
-    password
+    onSubmit
 }) => {
+
+    const username = useField('text')
+    const password = useField('password')
 
     return (
         <div>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={(event) => onSubmit(username.value, password.value, event)}>
                 <table>
                     <tbody>
                         <tr>
                             <td>käyttäjätunnus:</td>
                             <td>
-                                <input
-                                    type="text"
-                                    value={username}
-                                    name="Username"
-                                    onChange={({ target }) => handleUsernameChange(target.value)}
-                                />
+                                <input {...username}/>
                             </td>
                         </tr>
                         <tr>
                             <td>salasana:</td>
                             <td>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    name="Password"
-                                    onChange={({ target }) => handlePasswordChange(target.value)}
-                                />
+                                <input {...password}/>
                             </td>
                         </tr>
                     </tbody>

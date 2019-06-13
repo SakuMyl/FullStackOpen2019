@@ -14,8 +14,6 @@ const App = () => {
     const [blogs, setBlogs] = useState([])
     const [notification, setNotification]= useState(null)
     const [errorMessage, setErrorMessage] = useState(null)
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
 
     useEffect(() => {
@@ -88,7 +86,7 @@ const App = () => {
         }, 5000)
     }
 
-    const handleLogin = async (event) => {
+    const handleLogin = async (username, password, event) => {
         event.preventDefault()
         try {
             const user = await loginService.login({
@@ -99,8 +97,6 @@ const App = () => {
             blogService.setToken(user.token)
 
             setUser(user)
-            setUsername('')
-            setPassword('')
         } catch (exception) {
             handleErrorMessage('käyttäjätunnus tai salasana virheellinen')
         }
@@ -118,10 +114,6 @@ const App = () => {
                 <h2>Log in</h2>
                 {getNotification()}
                 <LoginForm
-                    username={username}
-                    password={password}
-                    handleUsernameChange={setUsername}
-                    handlePasswordChange={setPassword}
                     onSubmit={handleLogin}/>
             </div>
         )
