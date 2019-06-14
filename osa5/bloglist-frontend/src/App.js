@@ -17,7 +17,7 @@ const App = () => {
     const [user, setUser] = useState(null)
 
     useEffect(() => {
-        blogService.getAll().then(blogs =>{
+        blogService.getAll().then(blogs => {
             setBlogs( blogs )
         })
     }, [])

@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import blogService from '../services/blogs'
 import '../styles/CreateBlog.css'
+import { useField } from '../hooks'
 
 const CreateBlog = (props) => {
 
-    const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
+    const title = useField('text')
+    const author = useField('text')
+    const url = useField('text')
+    const fields = { title, author, url }
 
     useEffect(() => {
         if(props.user) {
@@ -16,21 +20,15 @@ const CreateBlog = (props) => {
         event.preventDefault()
         try {
             await blogService
-                .create(newBlog)
+                .create( { title: title.value, author: author.value, url: url.value } )
 
             props.handleNewBlog()
 
-            props.setNotification(`${newBlog.title} by ${newBlog.author} added`)
-            setNewBlog({ title: '', author: '', url: '' })
+            props.setNotification(`${title.value} by ${author.value} added`)
+            Object.keys(fields).forEach(key => fields[key].reset())
         } catch(error) {
             props.setErrorMessage(error.response.data.error)
         }
-    }
-
-    const onChange = (key, event) => {
-        const blog = { ...newBlog }
-        blog[key] = event.target.value
-        setNewBlog(blog)
     }
 
     return (
@@ -39,14 +37,11 @@ const CreateBlog = (props) => {
             <form className='CreateNewBlog' onSubmit={add}>
                 <table>
                     <tbody>
-                        {Object.keys(newBlog).map(key =>
+                        {Object.keys(fields).map(key =>
                             <tr key={key}>
                                 <td>{key}:</td>
                                 <td>
-                                    <input
-                                        value={newBlog[key]}
-                                        onChange={(event) => onChange(key, event)}
-                                    />
+                                    <input {...fields[key].getPropsForInputField()}/>
                                 </td>
                             </tr>
                         )}

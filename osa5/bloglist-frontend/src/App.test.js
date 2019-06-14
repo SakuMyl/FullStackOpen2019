@@ -2,7 +2,6 @@ import React from 'react'
 import 'jest-dom/extend-expect'
 import { render,  waitForElement } from '@testing-library/react'
 import App from './App'
-import mockService from './services/__mocks__/blogs'
 jest.mock('./services/blogs')
 
 describe('<App />', () => {
@@ -27,7 +26,7 @@ describe('<App />', () => {
             name: 'Teppo Tulppu'
         }
         localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-        
+
         const component = render(
             <App/>
         )
@@ -35,7 +34,7 @@ describe('<App />', () => {
         await waitForElement(
             () => component.container.querySelector('.Expandable')
         )
-        
+
         const blogs = component.container.querySelectorAll('.Expandable')
         expect(blogs.length).toBe(3)
 

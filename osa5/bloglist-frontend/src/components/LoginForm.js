@@ -1,5 +1,5 @@
 import React from 'react'
-import { useField } from '../hooks/index'
+import { useField } from '../hooks'
 
 const LoginForm = ({
     onSubmit
@@ -16,13 +16,13 @@ const LoginForm = ({
                         <tr>
                             <td>käyttäjätunnus:</td>
                             <td>
-                                <input {...username}/>
+                                <input {...username.getPropsForInputField()}/>
                             </td>
                         </tr>
                         <tr>
                             <td>salasana:</td>
                             <td>
-                                <input {...password}/>
+                                <input {...password.getPropsForInputField()}/>
                             </td>
                         </tr>
                     </tbody>
