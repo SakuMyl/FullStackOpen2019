@@ -1,4 +1,5 @@
 import React from 'react';
+import AnecdoteForm from './components/AnecdoteForm'
 import {create, vote} from './reducers/anecdoteReducer'
 
 const App = (props) => {
@@ -8,11 +9,7 @@ const App = (props) => {
   const voteAnecdote = (id) => {
     store.dispatch(vote(id))
   }
-  const createAnecdote = event =>{
-    event.preventDefault()
-    store.dispatch(create(event.target.anecdote.value))
-    event.target.anecdote.value = ''
-  }
+  
   const sorted = anecdotes => (
     anecdotes.sort((a, b) => b.votes - a.votes)
   )
@@ -31,11 +28,7 @@ const App = (props) => {
           </div>
         </div>
       )}
-      <h2>create new</h2>
-      <form onSubmit={createAnecdote}>
-        <div><input name='anecdote'/></div>
-        <button>create</button>
-      </form>
+      <AnecdoteForm store={store}/>
     </div>
   )
 }
