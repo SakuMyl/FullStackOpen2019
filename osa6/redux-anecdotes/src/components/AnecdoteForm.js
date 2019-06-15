@@ -1,9 +1,9 @@
 import React from 'react'
-import {create} from '../reducers/anecdoteReducer'
+import { create } from '../reducers/anecdoteReducer'
 
-const AnecdoteForm = ({store}) => {
+const AnecdoteForm = ({ store }) => {
 
-    const createAnecdote = event =>{
+    const createAnecdote = event => {
         event.preventDefault()
         store.dispatch(create(event.target.anecdote.value))
         event.target.anecdote.value = ''
