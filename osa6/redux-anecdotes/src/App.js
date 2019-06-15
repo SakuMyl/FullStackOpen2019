@@ -13,11 +13,14 @@ const App = (props) => {
     store.dispatch(create(event.target.anecdote.value))
     event.target.anecdote.value = ''
   }
+  const sorted = anecdotes => (
+    anecdotes.sort((a, b) => b.votes - a.votes)
+  )
   
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {sorted(anecdotes).map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
