@@ -10,8 +10,7 @@ const AnecdoteForm = props => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
-        const newAnecdote = await anecdoteService.create(content)
-        props.create(newAnecdote)
+        props.create(content)
         
         setTimeout(() => {
             props.clear()
