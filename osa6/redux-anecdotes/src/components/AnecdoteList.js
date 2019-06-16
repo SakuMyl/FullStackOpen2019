@@ -14,7 +14,7 @@ const AnecdoteList = props => {
         }, 5000)
     }
     const filter = anecdotes => (
-        anecdotes.filter(anecdote => anecdote.content.includes(store.getState().filter))
+        anecdotes.filter(anecdote => anecdote.content.includes(props.filter))
     )
 
     const sorted = anecdotes => (
@@ -40,7 +40,8 @@ const AnecdoteList = props => {
 
 const mapStateToProps = state => {
     return {
-        anecdotes: state.anecdotes
+        anecdotes: state.anecdotes,
+        filter: state.filter
     }
 }
 

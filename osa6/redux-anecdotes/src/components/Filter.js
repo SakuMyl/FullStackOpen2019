@@ -17,7 +17,7 @@ const Filter = (props) => {
     </div>
   )
 }
-const mapDispatchToProps = () => {
+const mapDispatchToProps = {
     changeFilter
 }
 

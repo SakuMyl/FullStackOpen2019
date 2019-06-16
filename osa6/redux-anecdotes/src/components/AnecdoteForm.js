@@ -24,7 +24,7 @@ const AnecdoteForm = props => {
         </div>
     )
 }
-const mapDispatchToProps = () => {
+const mapDispatchToProps = {
     create, 
     clear
 }
