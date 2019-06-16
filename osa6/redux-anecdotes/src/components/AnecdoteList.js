@@ -1,12 +1,16 @@
 import React from 'react'
 import { vote } from '../reducers/anecdoteReducer'
+import { clear } from '../reducers/notificationReducer'
 
 const AnecdoteList = ({ store }) => {
 
-    const anecdotes = store.getState()
+    const anecdotes = store.getState().anecdotes
 
-    const voteAnecdote = (id) => {
-        store.dispatch(vote(id))
+    const voteAnecdote = anecdote => {
+        store.dispatch(vote(anecdote))
+        setTimeout(() => {
+            store.dispatch(clear())
+        }, 5000)
     }
 
     const sorted = anecdotes => (
@@ -22,7 +26,7 @@ const AnecdoteList = ({ store }) => {
                     </div>
                     <div>
                         has {anecdote.votes}
-                        <button onClick={() => voteAnecdote(anecdote.id)}>vote</button>
+                        <button onClick={() => voteAnecdote(anecdote)}>vote</button>
                     </div>
                 </div>
             )}
