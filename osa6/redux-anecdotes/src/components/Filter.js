@@ -1,9 +1,10 @@
 import React from 'react'
 import { changeFilter } from '../reducers/filterReducer'
+import { connect } from 'react-redux'
 
 const Filter = (props) => {
   const handleChange = (event) => {
-    props.store.dispatch(changeFilter(event.target.value))    
+    props.changeFilter(event.target.value)
   }
 
   const style = {
@@ -16,5 +17,11 @@ const Filter = (props) => {
     </div>
   )
 }
+const mapDispatchToProps = () => {
+    changeFilter
+}
 
-export default Filter
+export default connect(
+    null,
+    mapDispatchToProps
+)(Filter)

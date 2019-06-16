@@ -1,14 +1,15 @@
 import React from 'react'
 import { create } from '../reducers/anecdoteReducer'
 import { clear } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
-const AnecdoteForm = ({ store }) => {
+const AnecdoteForm = props => {
 
     const createAnecdote = event => {
         event.preventDefault()
-        store.dispatch(create(event.target.anecdote.value))
+        props.create(event.target.anecdote.value)
         setTimeout(() => {
-            store.dispatch(clear())
+            props.clear()
         }, 5000)
         event.target.anecdote.value = ''
     }
@@ -23,5 +24,12 @@ const AnecdoteForm = ({ store }) => {
         </div>
     )
 }
+const mapDispatchToProps = () => {
+    create, 
+    clear
+}
 
-export default AnecdoteForm
+export default connect(
+    null,
+    mapDispatchToProps
+)(AnecdoteForm)
