@@ -12,6 +12,9 @@ const AnecdoteList = ({ store }) => {
             store.dispatch(clear())
         }, 5000)
     }
+    const filter = anecdotes => (
+        anecdotes.filter(anecdote => anecdote.content.includes(store.getState().filter))
+    )
 
     const sorted = anecdotes => (
         anecdotes.sort((a, b) => b.votes - a.votes)
@@ -19,7 +22,7 @@ const AnecdoteList = ({ store }) => {
 
     return (
         <div>
-            {sorted(anecdotes).map(anecdote =>
+            {sorted(filter(anecdotes)).map(anecdote =>
                 <div key={anecdote.id}>
                     <div>
                         {anecdote.content}
