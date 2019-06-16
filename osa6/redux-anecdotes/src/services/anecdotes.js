@@ -12,5 +12,9 @@ const create = async content => {
     const response = await axios.post(baseUrl, object)
     return response.data
 }
+const update = async (object, id) => {
+    const response = await axios.patch(`${baseUrl}/${id}`, object)
+    return response.data
+}
 
-export default { getAll, create }
+export default { getAll, create, update }

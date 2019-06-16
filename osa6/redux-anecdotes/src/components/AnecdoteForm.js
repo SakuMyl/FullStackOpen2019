@@ -2,7 +2,6 @@ import React from 'react'
 import { create } from '../reducers/anecdoteReducer'
 import { clear } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = props => {
 
