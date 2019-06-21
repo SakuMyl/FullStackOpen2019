@@ -3,6 +3,7 @@ import Blogs from './components/Blogs'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Users from './components/Users'
+import User from './components/User'
 import { connect } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -46,7 +47,8 @@ const App = props => {
             <button onClick={props.logout}>Log out</button>
 
             <Route exact path='/' render={() => <Blogs/>}/>
-            <Route path='/users' render={() => <Users/>}/>
+            <Route exact path='/users' render={() => <Users/>}/>
+            <Route path='/users/:id' render={({ match }) => <User match={match} id={match.params.id}/>}/>
         </div>
     )
 }

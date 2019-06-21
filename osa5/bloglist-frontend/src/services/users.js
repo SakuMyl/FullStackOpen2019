@@ -2,8 +2,8 @@ import axios from "axios";
 
 const baseUrl = '/api/users'
 
-const get = user => {
-    const request = axios.get(`${baseUrl}/${user.id}`)
+const get = id => {
+    const request = axios.get(`${baseUrl}/${id}`)
     return request.then(response => response.data)
 }
 
