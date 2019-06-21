@@ -21,12 +21,12 @@ export const setNotification = (content, options, timeout=5) => {
 }
 const notificationReducer = (state = '', action) => {
     switch(action.type) {
-        case 'NEW_NOTIFICATION':
-            return action.data
-        case 'CLEAR':
-            return ''
-        default:
-            return state
+    case 'NEW_NOTIFICATION':
+        return action.data
+    case 'CLEAR':
+        return ''
+    default:
+        return state
     }
 }
 

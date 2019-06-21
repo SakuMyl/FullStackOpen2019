@@ -1,7 +1,7 @@
 import blogService from '../services/blogs'
 
 export const like = blog => {
-    blogService.update(blog.id, {likes: blog.likes + 1})
+    blogService.update(blog.id, { likes: blog.likes + 1 })
     return {
         type: 'LIKE',
         data: {

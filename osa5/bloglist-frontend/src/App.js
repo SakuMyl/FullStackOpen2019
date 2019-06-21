@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
-import loginService from './services/login'
 import CreateBlog from './components/CreateBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -9,13 +7,13 @@ import LoginForm from './components/LoginForm'
 import { connect } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-
+import { login, logout, checkLogin } from './reducers/userReducer'
 import './App.css'
 
 const App = props => {
 
     const blogs = props.blogs
-    const [user, setUser] = useState(null)
+    const user = props.user
     const createBlogRef = useState(React.createRef())[0]
 
     useEffect(() => {
@@ -23,12 +21,7 @@ const App = props => {
     }, [])
 
     useEffect(() => {
-        const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
-        if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
-            setUser(user)
-            blogService.setToken(user.token)
-        }
+        props.checkLogin()
     }, [])
 
     const handleNewBlog = () => {
@@ -37,24 +30,7 @@ const App = props => {
 
     const handleLogin = async (username, password, event) => {
         event.preventDefault()
-        try {
-            const user = await loginService.login({
-                username, password,
-            })
-
-            window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-            blogService.setToken(user.token)
-
-            setUser(user)
-        } catch (exception) {
-            props.setNotification('käyttäjätunnus tai salasana virheellinen', { error: true })
-        }
-    }
-
-    const handleLogout = (event) => {
-        event.preventDefault()
-        window.localStorage.removeItem('loggedBloglistUser')
-        setUser(null)
+        props.login(username, password)
     }
 
     if(user === null) {
@@ -76,7 +52,7 @@ const App = props => {
 
             <p>{user.name} logged in</p>
 
-            <button onClick={handleLogout}>Log out</button>
+            <button onClick={props.logout}>Log out</button>
 
             <Togglable buttonLabel='Create new blog' ref={createBlogRef}>
                 <CreateBlog
@@ -93,11 +69,15 @@ const App = props => {
 
 const mapDispatchToProps = {
     setNotification,
-    initializeBlogs
+    initializeBlogs,
+    login,
+    logout,
+    checkLogin
 }
 const mapStateToProps = state => {
     return {
-        blogs: state.blogs
+        blogs: state.blogs,
+        user: state.user
     }
 }
 

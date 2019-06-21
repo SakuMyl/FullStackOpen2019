@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import blogService from '../services/blogs'
+import React from 'react'
 import '../styles/CreateBlog.css'
 import { useField } from '../hooks'
 import { create } from '../reducers/blogReducer'
@@ -13,24 +12,17 @@ const CreateBlog = (props) => {
     const url = useField('text')
     const fields = { title, author, url }
 
-    useEffect(() => {
-        if(props.user) {
-            blogService.setToken(props.user.token)
-        }
-    }, [])
-
     const add = async (event) => {
         event.preventDefault()
         try {
             await props
                 .create( { title: title.value, author: author.value, url: url.value }, props.user )
-            
+
             props.handleNewBlog()
 
             props.setNotification(`${title.value} by ${author.value} added`)
             Object.keys(fields).forEach(key => fields[key].reset())
         } catch(error) {
-            console.log(error)
             props.setNotification(error.response.data.error, { error: true })
         }
     }

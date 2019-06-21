@@ -9,7 +9,7 @@ const Notification = props => {
     return (
         notification.content ?
             <div className={notification.error ? 'Error' : 'Notification'}>{notification.content}</div>
-        : null
+            : null
     )
 }
 
