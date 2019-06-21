@@ -1,11 +1,22 @@
 import React from 'react'
 import '../styles/Notification.css'
+import { connect } from 'react-redux'
 
 const Notification = props => {
 
     return (
-        <div className={props.className}>{props.message}</div>
+        props.notification ?
+            <div className={props.className}>{props.notification}</div>
+        : null
     )
 }
 
-export default Notification
+const mapStateToProps = state => {
+    return {
+        notification: state.notification
+    }
+}
+
+export default connect(
+    mapStateToProps
+)(Notification)

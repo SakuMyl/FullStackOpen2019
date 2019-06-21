@@ -6,14 +6,15 @@ import CreateBlog from './components/CreateBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
+import { connect } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 
 import './App.css'
 
-const App = () => {
+const App = props => {
 
     const [blogs, setBlogs] = useState([])
-    const [notification, setNotification]= useState(null)
-    const [errorMessage, setErrorMessage] = useState(null)
+    const [error, setError] = useState(false)
     const [user, setUser] = useState(null)
 
     useEffect(() => {
@@ -59,30 +60,18 @@ const App = () => {
         }
     }
 
-    const getNotification = () => {
-        if(notification) {
-            return (
-                <Notification className='Notification' message={notification}/>
-            )
-        } else if(errorMessage) {
-            return (
-                <Notification className='Error' message={errorMessage}/>
-            )
-        } else {
-            return undefined
-        }
-    }
-
     const handleErrorMessage = message => {
-        setErrorMessage(message)
+        setError(true)
+        props.setNotification(message)
         setTimeout(() => {
-            setErrorMessage(null)
+            setError(false)
+            props.setNotification('')
         }, 5000)
     }
     const handleNotification = message => {
-        setNotification(message)
+        props.setNotification(message)
         setTimeout(() => {
-            setNotification(null)
+            props.setNotification('')
         }, 5000)
     }
 
@@ -112,7 +101,7 @@ const App = () => {
         return (
             <div>
                 <h2>Log in</h2>
-                {getNotification()}
+                <Notification className={error ? 'Error' : 'Notification' }/>
                 <LoginForm
                     onSubmit={handleLogin}/>
             </div>
@@ -123,7 +112,7 @@ const App = () => {
         <div>
             <h1>Bloglist</h1>
 
-            {getNotification()}
+            <Notification className={error ? 'Error' : 'Notification' }/>
 
             <p>{user.name} logged in</p>
 
@@ -144,4 +133,8 @@ const App = () => {
     )
 }
 
-export default App
+const mapDispatchToProps = {
+    setNotification
+}
+
+export default connect(null, mapDispatchToProps)(App)
