@@ -4,9 +4,11 @@ import { connect } from 'react-redux'
 
 const Notification = props => {
 
+    const notification = props.notification
+
     return (
-        props.notification ?
-            <div className={props.className}>{props.notification}</div>
+        notification.content ?
+            <div className={notification.error ? 'Error' : 'Notification'}>{notification.content}</div>
         : null
     )
 }

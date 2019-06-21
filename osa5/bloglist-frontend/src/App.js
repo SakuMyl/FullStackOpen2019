@@ -8,19 +8,18 @@ import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import { connect } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 import './App.css'
 
 const App = props => {
 
-    const [blogs, setBlogs] = useState([])
-    const [error, setError] = useState(false)
+    const blogs = props.blogs
     const [user, setUser] = useState(null)
+    const createBlogRef = useState(React.createRef())[0]
 
     useEffect(() => {
-        blogService.getAll().then(blogs => {
-            setBlogs( blogs )
-        })
+        props.initializeBlogs()
     }, [])
 
     useEffect(() => {
@@ -32,47 +31,8 @@ const App = props => {
         }
     }, [])
 
-    const createBlogRef = React.createRef()
-
     const handleNewBlog = () => {
         createBlogRef.current.toggleVisibility()
-        blogService.getAll().then(blogs =>
-            setBlogs( blogs )
-        )
-    }
-
-    const handleBlogLike = async (blog) => {
-        blogService.update(blog.id, { likes: blog.likes + 1 })
-        const newBlogs = blogs.map(b => b.id === blog.id ? { ...b, likes: b.likes + 1 } : b)
-        setBlogs(newBlogs)
-    }
-
-    const handleBlogRemoval = async (blog) => {
-        try {
-            if(window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-                await blogService.remove(blog.id)
-                const newBlogs = blogs.filter(b => b.id !== blog.id)
-                setBlogs(newBlogs)
-                handleNotification(`${blog.title} by ${blog.author} removed successfully`)
-            }
-        } catch(error) {
-            handleErrorMessage(error.response.data.error)
-        }
-    }
-
-    const handleErrorMessage = message => {
-        setError(true)
-        props.setNotification(message)
-        setTimeout(() => {
-            setError(false)
-            props.setNotification('')
-        }, 5000)
-    }
-    const handleNotification = message => {
-        props.setNotification(message)
-        setTimeout(() => {
-            props.setNotification('')
-        }, 5000)
     }
 
     const handleLogin = async (username, password, event) => {
@@ -87,7 +47,7 @@ const App = props => {
 
             setUser(user)
         } catch (exception) {
-            handleErrorMessage('käyttäjätunnus tai salasana virheellinen')
+            props.setNotification('käyttäjätunnus tai salasana virheellinen', { error: true })
         }
     }
 
@@ -101,7 +61,7 @@ const App = props => {
         return (
             <div>
                 <h2>Log in</h2>
-                <Notification className={error ? 'Error' : 'Notification' }/>
+                <Notification/>
                 <LoginForm
                     onSubmit={handleLogin}/>
             </div>
@@ -112,7 +72,7 @@ const App = props => {
         <div>
             <h1>Bloglist</h1>
 
-            <Notification className={error ? 'Error' : 'Notification' }/>
+            <Notification/>
 
             <p>{user.name} logged in</p>
 
@@ -122,19 +82,23 @@ const App = props => {
                 <CreateBlog
                     user={user}
                     handleNewBlog={handleNewBlog}
-                    setNotification={handleNotification}
-                    setErrorMessage={handleErrorMessage}
                 />
             </Togglable>
             {blogs.sort((a, b) => { return b.likes - a.likes;}).map(blog =>
-                <Blog key={blog.id} userOwns={user.name === blog.user.name} remove={handleBlogRemoval}blog={blog} like={handleBlogLike}/>
+                <Blog key={blog.id} userOwns={user.name === blog.user.name} blog={blog}/>
             )}
         </div>
     )
 }
 
 const mapDispatchToProps = {
-    setNotification
+    setNotification,
+    initializeBlogs
+}
+const mapStateToProps = state => {
+    return {
+        blogs: state.blogs
+    }
 }
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

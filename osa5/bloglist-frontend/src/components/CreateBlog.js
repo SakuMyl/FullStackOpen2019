@@ -2,6 +2,9 @@ import React, { useEffect } from 'react'
 import blogService from '../services/blogs'
 import '../styles/CreateBlog.css'
 import { useField } from '../hooks'
+import { create } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
 const CreateBlog = (props) => {
 
@@ -19,15 +22,16 @@ const CreateBlog = (props) => {
     const add = async (event) => {
         event.preventDefault()
         try {
-            await blogService
-                .create( { title: title.value, author: author.value, url: url.value } )
-
+            await props
+                .create( { title: title.value, author: author.value, url: url.value }, props.user )
+            
             props.handleNewBlog()
 
             props.setNotification(`${title.value} by ${author.value} added`)
             Object.keys(fields).forEach(key => fields[key].reset())
         } catch(error) {
-            props.setErrorMessage(error.response.data.error)
+            console.log(error)
+            props.setNotification(error.response.data.error, { error: true })
         }
     }
 
@@ -53,4 +57,9 @@ const CreateBlog = (props) => {
     )
 }
 
-export default CreateBlog
+const mapDispatchToProps = {
+    create,
+    setNotification
+}
+
+export default connect(null, mapDispatchToProps)(CreateBlog)

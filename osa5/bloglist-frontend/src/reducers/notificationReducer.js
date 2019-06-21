@@ -4,11 +4,15 @@ export const clear = () => {
     }
 }
 
-export const setNotification = (content, timeout=5) => {
+export const setNotification = (content, options, timeout=5) => {
     return async dispatch => {
+        const error = options ? options.error : false
         dispatch({
             type: 'NEW_NOTIFICATION',
-            content
+            data: {
+                content,
+                error
+            }
         })
         setTimeout(() => {
             dispatch(clear())
@@ -18,7 +22,7 @@ export const setNotification = (content, timeout=5) => {
 const notificationReducer = (state = '', action) => {
     switch(action.type) {
         case 'NEW_NOTIFICATION':
-            return action.content
+            return action.data
         case 'CLEAR':
             return ''
         default:
