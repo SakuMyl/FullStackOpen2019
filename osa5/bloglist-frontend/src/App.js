@@ -4,8 +4,8 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
 import { connect } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { login, logout, checkLogin } from './reducers/userReducer'
 import { Route } from 'react-router'
@@ -46,15 +46,15 @@ const App = props => {
 
             <button onClick={props.logout}>Log out</button>
 
-            <Route exact path='/' render={() => <Blogs/>}/>
+            <Route exact path={['/', '/blogs']} render={() => <Blogs/>}/>
             <Route exact path='/users' render={() => <Users/>}/>
             <Route path='/users/:id' render={({ match }) => <User match={match} id={match.params.id}/>}/>
+            <Route path='/blogs/:id' render={({ match }) => <Blog id={match.params.id}/>}/>
         </div>
     )
 }
 
 const mapDispatchToProps = {
-    setNotification,
     initializeBlogs,
     login,
     logout,

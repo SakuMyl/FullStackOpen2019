@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Togglable from './Togglable'
 import CreateBlog from './CreateBlog'
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import '../styles/Expandable.css'
 
 const Blogs = props => {
 
@@ -23,7 +24,9 @@ const Blogs = props => {
                 />
             </Togglable>
             {blogs.sort((a, b) => { return b.likes - a.likes;}).map(blog =>
-                <Blog key={blog.id} userOwns={user.name === blog.user.name} blog={blog}/>
+                <div key={blog.id} className='Expandable'>
+                    <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+                </div>
             )}
         </div>
     )

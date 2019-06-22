@@ -1,15 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { like, remove } from '../reducers/blogReducer'
+import Expandable from './Expandable'
+import PropTypes from 'prop-types'
+import { remove, like } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
-const Blog = props => {
+const ExpandableBlog = props => {
 
     const blog = props.blog
-    if(!blog) return null
-
-    const userOwns = blog.user.name === props.user.name
-    const showWhenOwned = { display: userOwns ? '' : 'none' }
+    const showWhenOwned = { display: props.userOwns ? '' : 'none' }
 
     const handleRemoval = async () => {
         try {
@@ -21,33 +20,30 @@ const Blog = props => {
             props.setNotification(error.response.data.error, { error: true })
         }
     }
-
     return (
-        <div>
-            <h1>{blog.title} {blog.author}</h1>
+        <Expandable label={`${blog.title} ${blog.author}`}>
             <a href={blog.url}>{blog.url}</a>
             <div>
-                <span>{blog.likes} likes</span>
+                <span>{blog.likes} likes </span>
                 <button onClick={() => props.like(blog)}>like</button>
             </div>
             <div>Added by {blog.user.name}</div>
             <button style={showWhenOwned} onClick={handleRemoval}>remove</button>
-        </div>
-
+        </Expandable>
     )
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        blog: state.blogs.find(b => b.id === ownProps.id),
-        user: state.user
-    }
+ExpandableBlog.propTypes = {
+    remove: PropTypes.func.isRequired,
+    like: PropTypes.func.isRequired,
+    blog: PropTypes.object.isRequired,
+    userOwns: PropTypes.bool.isRequired
 }
 
 const mapDispatchToProps = {
-    like,
     remove,
+    like,
     setNotification
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Blog)
+export default connect(null, mapDispatchToProps)(ExpandableBlog)
