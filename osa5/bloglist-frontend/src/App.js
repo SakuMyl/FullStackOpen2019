@@ -8,7 +8,7 @@ import Blog from './components/Blog'
 import Menu from './components/Menu'
 import { connect } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
-import { login, logout, checkLogin } from './reducers/userReducer'
+import { logout, checkLogin } from './reducers/userReducer'
 import { Route } from 'react-router'
 import './App.css'
 
@@ -21,18 +21,14 @@ const App = props => {
         props.checkLogin()
     }, [])
 
-    const handleLogin = async (username, password, event) => {
-        event.preventDefault()
-        props.login(username, password)
-    }
+
 
     if(user === null) {
         return (
             <div>
                 <h2>Log in</h2>
                 <Notification/>
-                <LoginForm
-                    onSubmit={handleLogin}/>
+                <LoginForm/>
             </div>
         )
     }
@@ -55,7 +51,6 @@ const App = props => {
 
 const mapDispatchToProps = {
     initializeBlogs,
-    login,
     logout,
     checkLogin
 }

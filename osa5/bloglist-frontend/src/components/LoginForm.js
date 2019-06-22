@@ -1,16 +1,21 @@
 import React from 'react'
 import { useField } from '../hooks'
+import { connect } from 'react-redux'
+import { login } from '../reducers/userReducer'
 
-const LoginForm = ({
-    onSubmit
-}) => {
+const LoginForm = props => {
 
     const username = useField('text')
     const password = useField('password')
 
+    const handleLogin = async event => {
+        event.preventDefault()
+        props.login(username.value, password.value)
+    }
+
     return (
         <div>
-            <form onSubmit={(event) => onSubmit(username.value, password.value, event)}>
+            <form onSubmit={handleLogin}>
                 <table>
                     <tbody>
                         <tr>
@@ -33,4 +38,8 @@ const LoginForm = ({
     )
 }
 
-export default LoginForm
+const mapDispatchToProps = {
+    login
+}
+
+export default connect(null, mapDispatchToProps)(LoginForm)
