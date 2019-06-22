@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import Menu from './components/Menu'
 import { connect } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { login, logout, checkLogin } from './reducers/userReducer'
@@ -38,13 +39,11 @@ const App = props => {
 
     return (
         <div>
+            <Menu user={user}/>
+
             <h1>Bloglist</h1>
 
             <Notification/>
-
-            <p>{user.name} logged in</p>
-
-            <button onClick={props.logout}>Log out</button>
 
             <Route exact path={['/', '/blogs']} render={() => <Blogs/>}/>
             <Route exact path='/users' render={() => <Users/>}/>

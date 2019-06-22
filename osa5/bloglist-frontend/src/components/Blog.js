@@ -6,6 +6,7 @@ import { setNotification } from '../reducers/notificationReducer'
 const Blog = props => {
 
     const blog = props.blog
+
     if(!blog) return null
 
     const userOwns = blog.user.name === props.user.name
@@ -32,6 +33,12 @@ const Blog = props => {
             </div>
             <div>Added by {blog.user.name}</div>
             <button style={showWhenOwned} onClick={handleRemoval}>remove</button>
+            <h2>comments</h2>
+            <ul>
+                {blog.comments.map(comment =>
+                    <li key={comment.id}>{comment.content}</li>
+                )}
+            </ul>
         </div>
 
     )
