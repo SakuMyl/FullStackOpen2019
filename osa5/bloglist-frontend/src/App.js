@@ -5,11 +5,13 @@ import LoginForm from './components/LoginForm'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
-import Menu from './components/Menu'
+import AppMenu from './components/Menu'
 import { connect } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { logout, checkLogin } from './reducers/userReducer'
 import { Route } from 'react-router'
+import { Container, Divider } from 'semantic-ui-react'
+
 import './App.css'
 
 const App = props => {
@@ -25,19 +27,21 @@ const App = props => {
 
     if(user === null) {
         return (
-            <div>
+            <Container>
                 <h2>Log in</h2>
                 <Notification/>
                 <LoginForm/>
-            </div>
+            </Container>
         )
     }
 
     return (
-        <div>
-            <Menu user={user}/>
+        <Container>
+            <AppMenu user={user}/>
 
             <h1>Bloglist</h1>
+
+            <Divider/>
 
             <Notification/>
 
@@ -45,7 +49,7 @@ const App = props => {
             <Route exact path='/users' render={() => <Users/>}/>
             <Route path='/users/:id' render={({ match }) => <User match={match} id={match.params.id}/>}/>
             <Route path='/blogs/:id' render={({ match }) => <Blog id={match.params.id}/>}/>
-        </div>
+        </Container>
     )
 }
 

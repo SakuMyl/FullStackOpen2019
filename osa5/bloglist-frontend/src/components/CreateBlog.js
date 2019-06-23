@@ -1,9 +1,9 @@
 import React from 'react'
-import '../styles/CreateBlog.css'
 import { useField } from '../hooks'
 import { create } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
+import { Form, Button } from 'semantic-ui-react'
 
 const CreateBlog = (props) => {
 
@@ -28,23 +28,17 @@ const CreateBlog = (props) => {
     }
 
     return (
-        <div className='CreateNewBlogContainer'>
-            <h2>create new</h2>
-            <form className='CreateNewBlog' onSubmit={add}>
-                <table>
-                    <tbody>
-                        {Object.keys(fields).map(key =>
-                            <tr key={key}>
-                                <td>{key}:</td>
-                                <td>
-                                    <input {...fields[key].getPropsForInputField()}/>
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-                <button type='submit'>submit</button>
-            </form>
+        <div>
+            <h2>Create new</h2>
+            <Form onSubmit={add}>
+                {Object.keys(fields).map(key =>
+                    <Form.Field width={5} key={key}>
+                        <label>{key}</label>
+                        <input {...fields[key].getPropsForInputField()}/>
+                    </Form.Field>
+                )}
+                <Button size='small' type='submit'>submit</Button>
+            </Form>
         </div>
     )
 }

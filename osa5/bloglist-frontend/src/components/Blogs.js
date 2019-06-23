@@ -3,6 +3,7 @@ import Togglable from './Togglable'
 import CreateBlog from './CreateBlog'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { List } from 'semantic-ui-react'
 import '../styles/Expandable.css'
 
 const Blogs = props => {
@@ -17,17 +18,27 @@ const Blogs = props => {
 
     return (
         <div>
-            <Togglable buttonLabel='Create new blog' ref={createBlogRef}>
+            <Togglable textOnHidden='Create new blog' textOnShown='Cancel' ref={createBlogRef}>
                 <CreateBlog
                     user={user}
                     handleNewBlog={handleNewBlog}
                 />
             </Togglable>
-            {blogs.sort((a, b) => { return b.likes - a.likes;}).map(blog =>
-                <div key={blog.id} className='Expandable'>
-                    <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-                </div>
-            )}
+            <List divided relaxed>
+                {blogs.sort((a, b) => { return b.likes - a.likes;}).map(blog =>
+                    <List.Item key={blog.id}>
+                        <List.Content>
+                            <List.Header>
+                                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                            </List.Header>
+                            <List.Description>
+                                {blog.author}
+                            </List.Description>
+                        </List.Content>
+
+                    </List.Item>
+                )}
+            </List>
         </div>
     )
 }

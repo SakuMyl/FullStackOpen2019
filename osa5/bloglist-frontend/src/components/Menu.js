@@ -2,17 +2,25 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../reducers/userReducer'
-import '../styles/Menu.css'
+import { Menu, Button } from 'semantic-ui-react'
 
-const Menu = props => {
+const AppMenu = props => {
 
     return (
-        <div className='Menu'>
-            <span className='Link'><Link to='/'>blogs</Link></span>
-            <span className='Link'><Link to='/users'>users</Link></span>
-            <span>{props.user.name} logged in</span>
-            <button onClick={props.logout}>logout</button>
-        </div>
+        <Menu>
+            <Menu.Item link>
+                <Link to='/'>blogs</Link>
+            </Menu.Item>
+            <Menu.Item link>
+                <Link to='/users'>users</Link>
+            </Menu.Item>
+            <Menu.Item>
+                {props.user.name} logged in
+            </Menu.Item>
+            <Menu.Item>
+                <Button onClick={props.logout}>logout</Button>
+            </Menu.Item>
+        </Menu>
     )
 }
 
@@ -20,4 +28,4 @@ const mapDispatchToProps = {
     logout
 }
 
-export default connect(null, mapDispatchToProps)(Menu)
+export default connect(null, mapDispatchToProps)(AppMenu)

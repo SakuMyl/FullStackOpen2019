@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { like, remove, comment } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useField } from '../hooks';
+import { Button, Form, Divider } from 'semantic-ui-react'
 
 const Blog = props => {
 
@@ -38,15 +39,20 @@ const Blog = props => {
             <a href={blog.url}>{blog.url}</a>
             <div>
                 <span>{blog.likes} likes</span>
-                <button onClick={() => props.like(blog)}>like</button>
+                <Button compact size='tiny' onClick={() => props.like(blog)}>like</Button>
             </div>
             <div>Added by {blog.user.name}</div>
-            <button style={showWhenOwned} onClick={handleRemoval}>remove</button>
+            <Button compact size='tiny' style={showWhenOwned} onClick={handleRemoval}>remove</Button>
+
+            <Divider/>
+
             <h2>comments</h2>
-            <form onSubmit={handleNewComment}>
-                <input {...comment.getPropsForInputField()}/>
-                <button type='submit'>add comment</button>
-            </form>
+            <Form onSubmit={handleNewComment}>
+                <Form.Input width={5}>
+                    <input {...comment.getPropsForInputField()}/>
+                    <Form.Button type='submit'>add comment</Form.Button>
+                </Form.Input>
+            </Form>
             <ul>
                 {blog.comments.map(comment =>
                     <li key={comment.id}>{comment.content}</li>

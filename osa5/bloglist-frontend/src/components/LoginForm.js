@@ -2,6 +2,7 @@ import React from 'react'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
 import { login } from '../reducers/userReducer'
+import { Form, Button } from 'semantic-ui-react'
 
 const LoginForm = props => {
 
@@ -15,25 +16,17 @@ const LoginForm = props => {
 
     return (
         <div>
-            <form onSubmit={handleLogin}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>käyttäjätunnus:</td>
-                            <td>
-                                <input {...username.getPropsForInputField()}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>salasana:</td>
-                            <td>
-                                <input {...password.getPropsForInputField()}/>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button type="submit">kirjaudu</button>
-            </form>
+            <Form onSubmit={handleLogin}>
+                <Form.Field width={5}>
+                    <label>käyttäjätunnus</label>
+                    <input {...username.getPropsForInputField()}/>
+                </Form.Field>
+                <Form.Field width={5}>
+                    <label>salasana</label>
+                    <input {...password.getPropsForInputField()}/>
+                </Form.Field>
+                <Button type="submit">kirjaudu</Button>
+            </Form>
         </div>
     )
 }

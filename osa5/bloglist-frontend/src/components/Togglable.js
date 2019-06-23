@@ -1,10 +1,9 @@
 import React, { useState, useImperativeHandle } from 'react'
-import '../styles/Togglable.css'
+import { Button } from 'semantic-ui-react'
 
 const Togglable = React.forwardRef((props, ref) => { //eslint-disable-line react/display-name
     const [visible, setVisible] = useState(false)
 
-    const hideWhenVisible = { display: visible ? 'none' : '' }
     const showWhenVisible = { display: visible ? '' : 'none' }
 
     const toggleVisibility = () => {
@@ -18,13 +17,10 @@ const Togglable = React.forwardRef((props, ref) => { //eslint-disable-line react
     })
 
     return (
-        <div className='TogglableContainer'>
-            <div style={hideWhenVisible}>
-                <button onClick={toggleVisibility}>{props.buttonLabel}</button>
-            </div>
+        <div>
+            <Button content={visible ? props.textOnShown : props.textOnHidden} size='small' onClick={toggleVisibility}/>
             <div style={showWhenVisible}>
                 {props.children}
-                <button onClick={toggleVisibility}>cancel</button>
             </div>
         </div>
     )
