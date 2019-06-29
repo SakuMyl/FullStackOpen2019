@@ -9,7 +9,7 @@ import AppMenu from './components/Menu'
 import { connect } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { logout, checkLogin } from './reducers/userReducer'
-import { Route } from 'react-router'
+import { Route, Redirect } from 'react-router'
 import { Container, Divider } from 'semantic-ui-react'
 
 import './App.css'
@@ -45,7 +45,8 @@ const App = props => {
 
             <Notification/>
 
-            <Route exact path={['/', '/blogs']} render={() => <Blogs/>}/>
+            <Route exact path='/' render={() => <Redirect to='/blogs'/>}/>
+            <Route exact path='/blogs' render={() => <Blogs/>}/>
             <Route exact path='/users' render={() => <Users/>}/>
             <Route path='/users/:id' render={({ match }) => <User match={match} id={match.params.id}/>}/>
             <Route path='/blogs/:id' render={({ match }) => <Blog id={match.params.id}/>}/>

@@ -8,7 +8,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 const render = () => {
     ReactDOM.render(
         <Provider store={store}>
-            <Router>
+            <Router basename='/#'>
                 <App/>
             </Router>
         </Provider>,

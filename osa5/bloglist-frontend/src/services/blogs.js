@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 
-const baseUrl = '/api/blogs'
+const baseUrl = `${BACKEND_URL}/blogs`
 
 var token = null
 
